@@ -279,7 +279,7 @@ class StartWindow(wx.Frame):
 if __name__ == '__main__':
         
  
-        app = wx.PySimpleApp()
+        app = wx.App(False)
         frame = StartWindow()
         app.MainLoop()
         
