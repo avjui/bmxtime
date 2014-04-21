@@ -10,7 +10,7 @@ class Database():
     def CeckDatabase(self):
 
         self.cursor = self.connection.cursor()
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS Fahrer (FahrerNR INTEGER, Nachname TEXT, Vorname TEXT, Klasse TEXT ) ')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS Fahrer (FahrerNR INTEGER, Nachname TEXT, Vorname TEXT, Datum TEXT, Klasse TEXT ) ')
         self.cursor.execute('CREATE TABLE IF NOT EXISTS Zeiten (FahrerNR INTEGER, Zwischenzeit1 TEXT, Zwischenzeit2 TEXT, Endzeit TEXT) ')
         self.connection.commit()
         self.cursor.close()
@@ -18,7 +18,7 @@ class Database():
     def AddData(self, table, columnlist1):
 
         self.cursor = self.connection.cursor()
-        sql = "INSERT INTO '%s'(FahrerNr, Nachname, Vorname, Klasse)VALUES (%d, '%s', '%s', '%s')"%(table, columnlist1[0], columnlist1[1], columnlist1[2], columnlist1[3])       
+        sql = "INSERT INTO '%s'(FahrerNr, Nachname, Vorname, Datum, Klasse)VALUES (%d, '%s', '%s', '%s', '%s')"%(table, columnlist1[0], columnlist1[1], columnlist1[2], columnlist1[3], columnlist1[4])       
         print sql
         self.cursor.execute(sql)
         self.connection.commit()

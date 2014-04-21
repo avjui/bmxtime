@@ -1,11 +1,39 @@
 import os
 import serial
+import time
 from serial.tools import list_ports
 
+import __init__
 
 class Connections():
+
+    def __init__(self):
+
+        self.ser = serial.Serial()
+        self.ser.baudrate = 9600
+        self.ser.port = 8
+        self.ser.timeout = 1
+        if self.ser.isOpen():
+            self.ser.close()
+        
+    def read_data(self, serial_ready):
+
+        self.ser.open()
+        i = 0
+        while serial_ready:
+            time_data = self.ser.read()
+            print(time_data)
+            if (i < 10):
+                i =+ 1
+                time.sleep(1)
+                
+            
+    def __del__(self):
+        self.ser.close()
     
         
+class Ports():
+
     def get_serial_ports(self):
         """
         Returns a generator for all available serial ports
@@ -29,7 +57,5 @@ class Connections():
 
         return self.list
 
-    def connect(self):
-        return True
 
 
