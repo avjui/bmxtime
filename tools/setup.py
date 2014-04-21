@@ -5,11 +5,16 @@ import os
 
 
 setup(
-        options = {'py2exe': {'bundle_files': 1, 'compressed': 1,}},
+        options = {'py2exe': {
+                        'bundle_files': 1,
+                        'compressed': 1,
+                        #'packages':['connection', 'database', 'driverlist'],
+                        }
+                   },
         zipfile = None,
-        data_files=[('icons', ['icons\\bmx.png', 'icons\\exit.png', icons\\favicon.ico'])],
+        data_files=[('icons', ['icons\\bmx.png', 'icons\\exit.png', 'icons\\favicon.ico'])],
         name = 'BMXtime',
-        version = 1.0.0 Beta,
+        version = '1.0.0 Beta',
         description = 'BMXtime is a small programm for time measure',
         windows=
           [
