@@ -43,7 +43,7 @@ class StartWindow(wx.Frame):
                 self.Bind(wx.EVT_MENU, self.OnSave, menuitem) # Hier wird der Event-Handler angegeben
                 
                 # Filemenu - About
-                menuitem = filemenu.Append(-1, "&About", "Informationen über das Programm")
+                menuitem = filemenu.Append(-1, "&About", "Informationen ï¿½ber das Programm")
                 self.Bind(wx.EVT_MENU, self.OnAbout, menuitem) # Hier wird der Event-Handler angegeben
      
                 # Filemenu - Separator
@@ -66,11 +66,11 @@ class StartWindow(wx.Frame):
                 filemenu3 = wx.Menu()
 
                 #Filemenu 3- Port
-                menuitem = filemenu3.Append(-1, "&Port", "Einstellungen für die Schnittstellen")
+                menuitem = filemenu3.Append(-1, "&Port", "Einstellungen fï¿½r die Schnittstellen")
                 self.Bind(wx.EVT_MENU, self.OnPortConfiguration, menuitem)
 
                 #Filemenu 3 - Messsstellen
-                menuitem = filemenu3.Append(-1, "&Messstellen", "Einstellungen für die Zwischenzeiten")
+                menuitem = filemenu3.Append(-1, "&Messstellen", "Einstellungen fï¿½r die Zwischenzeiten")
                 self.Bind(wx.EVT_MENU, self.OnTimeConfiguration, menuitem)
                 
                 # Menubar erstellen
@@ -161,7 +161,7 @@ class StartWindow(wx.Frame):
 
         def PopUpMenu(self, event):
                 popupmenu = wx.Menu()
-                popupmenu.Append(1, 'Löschen')
+                popupmenu.Append(1, 'Lï¿½schen')
                 popupmenu.Append(2, 'Bearbeiten')
                 popupmenu.Destroy()
                 
@@ -224,11 +224,11 @@ class StartWindow(wx.Frame):
                 Based on the wxPython demo - opens the MultiChoiceDialog
                 """
 
-                lst = Connections().get_serial_ports()
+                lst = Ports().get_serial_ports()
                 
                 if lst:
                         dlg = wx.MultiChoiceDialog( self, 
-                                           "Bitte den Com Port auswählen",
+                                           "Bitte den Com Port auswï¿½hlen",
                                            "Com Port Einstellungen", lst)
  
                         if (dlg.ShowModal() == wx.ID_OK):
@@ -238,7 +238,7 @@ class StartWindow(wx.Frame):
                             print "You chose:" + str(strings)
                         dlg.Destroy()
                 else:
-                        dlg = wx.MessageDialog( self, "Warnung kein Com Port verfügbar", "Schnittstellen Fehler", wx.ICON_ERROR)
+                        dlg = wx.MessageDialog( self, "Warnung kein Com Port verfï¿½gbar", "Schnittstellen Fehler", wx.ICON_ERROR)
                         if (dlg.ShowModal() == wx.ID_OK):
                                 dlg.Destroy()
 
@@ -260,7 +260,7 @@ class StartWindow(wx.Frame):
                 Shows the Aboutdialog
                 """
                 
-                description = """\nEine simples Zeitmessungprogramm mit Hilfe von Ardurino UNO\nEs werden auch Zwischenzeiten unterstützt"""
+                description = """\nEine simples Zeitmessungprogramm mit Hilfe von Ardurino UNO\nEs werden auch Zwischenzeiten unterstï¿½tzt"""
 
                 info = wx.AboutDialogInfo()
                 info.SetIcon(wx.Icon('icons/bmx.png', wx.BITMAP_TYPE_PNG))
@@ -284,7 +284,7 @@ if __name__ == '__main__':
         app.MainLoop()
         
 
-        # Zerstören der Objekte, damit dieses Beispiel
+        # Zerstï¿½ren der Objekte, damit dieses Beispiel
         # im IDLE nicht nur einmal funktioniert.
         del frame
         del app
