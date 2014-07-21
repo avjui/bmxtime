@@ -1,5 +1,7 @@
 import sqlite3
+from logger import Log
 
+log = Log()
 class Database():
 
     def __init__(self):
@@ -19,7 +21,7 @@ class Database():
 
         self.cursor = self.connection.cursor()
         sql = "INSERT INTO '%s'(FahrerNr, Nachname, Vorname, Datum, Klasse)VALUES (%d, '%s', '%s', '%s', '%s')"%(table, columnlist1[0], columnlist1[1], columnlist1[2], columnlist1[3], columnlist1[4])       
-        print sql
+        log.debug(sql)
         self.cursor.execute(sql)
         self.connection.commit()
         self.cursor.close()
@@ -40,7 +42,7 @@ class Database():
         self.cursor.execute(sql)
         data = self.cursor.fetchall()
         self.cursor.close()
-        print data
+        log.debug(data)
         return data
 
     def GetDataById(self, ID):

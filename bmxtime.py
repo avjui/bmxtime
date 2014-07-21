@@ -23,6 +23,7 @@ class StartWindow(wx.Frame):
                         style = wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
                 self.panel = wx.Panel(self, -1)
                 self.main()
+
                 
         def main(self):
 
@@ -201,12 +202,13 @@ class StartWindow(wx.Frame):
                         field.SetBackgroundColour('green')
                         field.Refresh()
 
-                serial_ready = True
-                # Start the serial connection
-                #time_datas = threading.Thread(target=Connections().read_data, args=(serial_ready,))
-                #time_datas.start()
+                #Threading for serial
+                ready_to_race = True
+                self.time_datas = threading.Thread(target=Connections().read_data, args=(ready_to_race,))
+                self.time_datas.setDaemon(True)
+                self.time_datas.start()
 
-                
+               
                
         def OnDriversList(self,event):
                 """
@@ -286,5 +288,5 @@ if __name__ == '__main__':
 
         # Zerst�ren der Objekte, damit dieses Beispiel
         # im IDLE nicht nur einmal funktioniert.
-        del frame
+        del frame        
         del app
