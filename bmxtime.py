@@ -12,8 +12,9 @@ import threading
 from connection import Connections,Ports
 from database import Database
 from driverlist import DriverList
+from logger import Log
 
-
+log = Log()
 class StartWindow(wx.Frame):
      
         def __init__(self, parent = None, id = -1, title = "BMX Bludenz - Zeitmessung"):
@@ -142,7 +143,7 @@ class StartWindow(wx.Frame):
 
         def CreatList(self):
 
-                self.lc = wx.ListCtrl(self.panel, -1, size=(640,250), pos=(220,20), style=wx.LC_REPORT | wx.BORDER_SUNKEN | wx.LC_SORT_ASCENDING)
+                self.lc = wx.ListCtrl(self.panel, -1, size=(640,250), pos=(220,20), style=wx.LC_REPORT | wx.BORDER_SUNKEN)
                 self.lc.InsertColumn(0, 'Nr.')
                 self.lc.InsertColumn(1, 'Nachname')
                 self.lc.InsertColumn(2, 'Vorname')
@@ -158,6 +159,7 @@ class StartWindow(wx.Frame):
                 self.UpdateList(self)
                 self.lc.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.PopUpMenu, self.lc)
                 self.lc.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.GetReady, self.lc)
+                self.lc.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick, self.lc)
 
 
         def PopUpMenu(self, event):
@@ -168,7 +170,7 @@ class StartWindow(wx.Frame):
                 
 
         def UpdateList(self, event):
-                
+
                 self.lc.DeleteAllItems()
                 data = Database().GetAllData('Fahrer')
                 for i in data:
@@ -176,9 +178,34 @@ class StartWindow(wx.Frame):
                      self.lc.SetStringItem(index, 1, i[1])
                      self.lc.SetStringItem(index, 2, i[2])
                 return
+
+
+        def UpdateSortList(self, col):
+                """
+                Function to sort list by given column number
+                """
+                self.lc.DeleteAllItems()
+                if col ==0:
+                        data = Database().GetAllData('Fahrer', 'FahrerNR')
+                if col ==1:
+                        data = Database().GetAllData('Fahrer', 'Nachname')
+                if col ==2:
+                        data = Database().GetAllData('Fahrer', 'Vorname')
+                if col ==3:
+                        data = Database().GetAllData('Fahrer')
+                if col ==4:
+                        data = Database().GetAllData('Fahrer')
+                if col ==5:
+                        data = Database().GetAllData('Fahrer')
+
+                for i in data:
+                     index = self.lc.InsertStringItem(sys.maxint, str(i[0]))
+                     self.lc.SetStringItem(index, 1, i[1])
+                     self.lc.SetStringItem(index, 2, i[2])
+                return
+        
                 
-                
-        def GetReady(self,event):
+        def GetReady(self, event):
                 """
                 Set values from list to the Ready Box
                 """
@@ -191,6 +218,16 @@ class StartWindow(wx.Frame):
                 self.firstname.SetValue(self.fname.GetText())
                 self.secondname.SetValue(self.sname.GetText())
 
+        def OnColClick(self, event):
+                """
+                Function when you click on list colum
+                """
+                coln=event.GetColumn()
+                log.debug('List colum %d was be clicked' % coln)
+                self.UpdateSortList(coln)
+                event.Skip()
+
+                
         def SetReady(self, event):
 
                 """
@@ -240,7 +277,7 @@ class StartWindow(wx.Frame):
                             print "You chose:" + str(strings)
                         dlg.Destroy()
                 else:
-                        dlg = wx.MessageDialog( self, "Warnung kein Com Port verfï¿½gbar", "Schnittstellen Fehler", wx.ICON_ERROR)
+                        dlg = wx.MessageDialog( self, "Warnung kein Com Port verfügbar", "Schnittstellen Fehler", wx.ICON_ERROR)
                         if (dlg.ShowModal() == wx.ID_OK):
                                 dlg.Destroy()
 
@@ -288,5 +325,6 @@ if __name__ == '__main__':
 
         # Zerstï¿½ren der Objekte, damit dieses Beispiel
         # im IDLE nicht nur einmal funktioniert.
+        log.close()
         del frame        
         del app

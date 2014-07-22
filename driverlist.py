@@ -4,7 +4,9 @@ import wx
 import sys
 
 from database import Database
+from logger import Log
 
+log = Log()
 class DriverList(wx.Dialog):
      
         def __init__(self, parent):
@@ -38,7 +40,7 @@ class DriverList(wx.Dialog):
 
                 # create the list
                 
-                self.dl = wx.ListCtrl(self, -1, size=(640,250), pos=(220,20), style=wx.LC_REPORT | wx.BORDER_SUNKEN | wx.LC_SORT_ASCENDING)
+                self.dl = wx.ListCtrl(self, -1, size=(640,250), pos=(220,20), style=wx.LC_REPORT | wx.BORDER_SUNKEN)
                 self.dl.InsertColumn(0, 'Nr')
                 self.dl.InsertColumn(1, 'Nachname')
                 self.dl.InsertColumn(2, 'Vorname')
@@ -49,10 +51,12 @@ class DriverList(wx.Dialog):
                 self.dl.SetColumnWidth(2, 150)
                 self.dl.SetColumnWidth(3, 100)
                 self.dl.SetColumnWidth(4, 100)
-
+                
                 # add lines from database
                 self.__update_list()
                 
+                # Event for sorting list
+                self.dl.Bind(wx.EVT_LIST_COL_CLICK, self.__OnColClick, self.dl)
 
         def __save(self, event):
                 """
@@ -93,3 +97,34 @@ class DriverList(wx.Dialog):
                      self.dl.SetStringItem(index, 2, i[2])
                      self.dl.SetStringItem(index, 3, i[3])
                      self.dl.SetStringItem(index, 4, i[4])
+
+        
+        def __OnColClick(self, event):
+                """
+                Function when you click on list colum to sort the list
+                """
+                coln=event.GetColumn()
+                log.debug('[Driverslist] List colum %d was be clicked' % coln)
+
+                self.dl.DeleteAllItems()
+                if coln ==0:
+                        data = Database().GetAllData('Fahrer', 'FahrerNR')
+                if coln ==1:
+                        data = Database().GetAllData('Fahrer', 'Nachname')
+                if coln ==2:
+                        data = Database().GetAllData('Fahrer', 'Vorname')
+                if coln ==3:
+                        data = Database().GetAllData('Fahrer', 'Datum')
+                if coln ==4:
+                        data = Database().GetAllData('Fahrer', 'Klasse')
+
+                for i in data:
+                     index = self.dl.InsertStringItem(sys.maxint, str(i[0]))
+                     self.dl.SetStringItem(index, 1, i[1])
+                     self.dl.SetStringItem(index, 2, i[2])
+                     self.dl.SetStringItem(index, 3, i[3])
+                     self.dl.SetStringItem(index, 4, i[4])
+                event.Skip()
+                return
+
+        

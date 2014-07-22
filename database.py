@@ -35,10 +35,14 @@ class Database():
         self.connection.commit()
         self.cursor.close()
         
-    def GetAllData(self, table):
+    def GetAllData(self, table, order=''):
 
         self.cursor = self.connection.cursor()
-        sql = 'SELECT * FROM %s' % table
+        if order:
+            sql = 'SELECT * FROM %s ORDER BY %s' % (table, order)
+        else:
+            sql = 'SELECT * FROM %s' % table
+        log.debug(sql)
         self.cursor.execute(sql)
         data = self.cursor.fetchall()
         self.cursor.close()
