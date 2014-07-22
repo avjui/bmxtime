@@ -35,10 +35,12 @@ class Database():
         self.connection.commit()
         self.cursor.close()
         
-    def GetAllData(self, table, order=''):
+    def GetAllData(self, table, order='', withtime=False):
 
         self.cursor = self.connection.cursor()
-        if order:
+        if order and withtime:
+            sql = 'SELECT * FROM Fahrer,Zeiten WHERE Fahrer.FahrerNR=Zeiten.FahrerNr ORDER BY %s' % (order)
+        elif order:
             sql = 'SELECT * FROM %s ORDER BY %s' % (table, order)
         else:
             sql = 'SELECT * FROM %s' % table

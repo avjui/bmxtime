@@ -164,7 +164,7 @@ class StartWindow(wx.Frame):
 
         def PopUpMenu(self, event):
                 popupmenu = wx.Menu()
-                popupmenu.Append(1, 'Lï¿½schen')
+                popupmenu.Append(1, 'Löschen')
                 popupmenu.Append(2, 'Bearbeiten')
                 popupmenu.Destroy()
                 
@@ -172,11 +172,14 @@ class StartWindow(wx.Frame):
         def UpdateList(self, event):
 
                 self.lc.DeleteAllItems()
-                data = Database().GetAllData('Fahrer')
+                data = Database().GetAllData('Fahrer', 'Fahrer.FahrerNR', True)
                 for i in data:
                      index = self.lc.InsertStringItem(sys.maxint, str(i[0]))
                      self.lc.SetStringItem(index, 1, i[1])
                      self.lc.SetStringItem(index, 2, i[2])
+                     self.lc.SetStringItem(index, 3, i[6])
+                     self.lc.SetStringItem(index, 4, i[7])
+                     self.lc.SetStringItem(index, 5, i[8])
                 return
 
 
@@ -186,22 +189,25 @@ class StartWindow(wx.Frame):
                 """
                 self.lc.DeleteAllItems()
                 if col ==0:
-                        data = Database().GetAllData('Fahrer', 'FahrerNR')
+                        data = Database().GetAllData('Fahrer', 'Fahrer.FahrerNR', True)
                 if col ==1:
-                        data = Database().GetAllData('Fahrer', 'Nachname')
+                        data = Database().GetAllData('Fahrer', 'Fahrer.Nachname', True)
                 if col ==2:
-                        data = Database().GetAllData('Fahrer', 'Vorname')
+                        data = Database().GetAllData('Fahrer', 'Fahrer.Vorname', True)
                 if col ==3:
-                        data = Database().GetAllData('Fahrer')
+                        data = Database().GetAllData('Fahrer', 'Zeiten.Zwischenzeit1', True)
                 if col ==4:
-                        data = Database().GetAllData('Fahrer')
+                        data = Database().GetAllData('Fahrer', 'Zeiten.Zwischenzeit2', True)
                 if col ==5:
-                        data = Database().GetAllData('Fahrer')
+                        data = Database().GetAllData('Fahrer', 'Zeiten.Endzeit', True)
 
                 for i in data:
                      index = self.lc.InsertStringItem(sys.maxint, str(i[0]))
                      self.lc.SetStringItem(index, 1, i[1])
                      self.lc.SetStringItem(index, 2, i[2])
+                     self.lc.SetStringItem(index, 3, i[6])
+                     self.lc.SetStringItem(index, 4, i[7])
+                     self.lc.SetStringItem(index, 5, i[8])
                 return
         
                 
