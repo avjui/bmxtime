@@ -14,6 +14,7 @@ class Database():
         self.cursor = self.connection.cursor()
         self.cursor.execute('CREATE TABLE IF NOT EXISTS Fahrer (FahrerNR INTEGER, Nachname TEXT, Vorname TEXT, Datum TEXT, Klasse TEXT ) ')
         self.cursor.execute('CREATE TABLE IF NOT EXISTS Zeiten (FahrerNR INTEGER, Zwischenzeit1 TEXT, Zwischenzeit2 TEXT, Endzeit TEXT) ')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS Klassen (Klassen TEXT) ')
         self.connection.commit()
         self.cursor.close()
 
@@ -21,7 +22,7 @@ class Database():
 
         self.cursor = self.connection.cursor()
         sql = "INSERT INTO '%s'(FahrerNr, Nachname, Vorname, Datum, Klasse)VALUES (%d, '%s', '%s', '%s', '%s')"%(table, columnlist1[0], columnlist1[1], columnlist1[2], columnlist1[3], columnlist1[4])       
-        log.debug(sql)
+        log.debug('[AddData] %s'%sql)
         self.cursor.execute(sql)
         self.connection.commit()
         self.cursor.close()
@@ -30,13 +31,23 @@ class Database():
 
         self.cursor = self.connection.cursor()
         sql = "INSERT INTO Zeiten(FahrerNR, Zwischenzeit1, Zwischenzeit2, Endzeit)VALUES (%d, '%s', '%s', '%s')"%(columnlist2[0], columnlist2[1], columnlist2[2], columnlist2[3])       
-        print sql
+        log.debug('[AddDataById] %s'%sql)
         self.cursor.execute(sql)
         self.connection.commit()
         self.cursor.close()
-        
-    def GetAllData(self, table, order='', withtime=False):
 
+    def AddClass(self, name):
+
+        self.cursor = self.connection.cursor()
+        sql = "INSERT INTO Klassen(Klassen)VALUES ('%s')"%(name)       
+        log.debug('[AddClass] %s'%sql)
+        self.cursor.execute(sql)
+        self.connection.commit()
+        self.cursor.close()
+
+        
+    def GetAllData(self, table, order='', withtime=False, convert=False):
+            
         self.cursor = self.connection.cursor()
         if order and withtime:
             sql = 'SELECT * FROM Fahrer,Zeiten WHERE Fahrer.FahrerNR=Zeiten.FahrerNr ORDER BY %s' % (order)
@@ -46,7 +57,10 @@ class Database():
             sql = 'SELECT * FROM %s' % table
         log.debug(sql)
         self.cursor.execute(sql)
-        data = self.cursor.fetchall()
+        if convert:
+            data = [element[0] for element in self.cursor.fetchall()]
+        else:
+            data = self.cursor.fetchall()
         self.cursor.close()
         log.debug(data)
         return data
@@ -59,4 +73,13 @@ class Database():
         data = self.cursor.fetchall()
         return data
 
-Database().GetAllData('Fahrer')
+
+    def RemoveDataById(self, ID):
+
+        self.cursor = self.connection.cursor()
+        sql = "DELETE FROM Fahrer WHERE FahrerNR='%s'" % ID
+        self.cursor.execute(sql)
+        self.connection.commit()
+        self.cursor.close()
+        
+        return

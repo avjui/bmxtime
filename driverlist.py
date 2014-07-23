@@ -19,8 +19,8 @@ class DriverList(wx.Dialog):
                 
                 
         def __CreateDriversList(self):
-
-                self.DropDownList = ['test1', 'Test2', 'Test3']                 
+                
+                self.DropDownList = Database().GetAllData('Klassen', convert=True)                
                 wx.StaticText(self, -1, 'Nr.', pos=(20,20))
                 self.nbr = wx.TextCtrl(self, -1, pos=(20,45), size=(40,-1))
                 wx.StaticText(self, -1, 'Vorname.', pos=(20,70))
@@ -30,7 +30,7 @@ class DriverList(wx.Dialog):
                 wx.StaticText(self, -1, 'Geburtsdatum', pos=(20,170))
                 self.date = wx.TextCtrl(self, -1, size=(150,-1), pos=(20,195))
                 wx.StaticText(self, -1, 'Klasse', pos=(20,220))
-                self.clas = wx.ComboBox(self, value="Klasse Auswählen", choices=self.DropDownList, size=(150,-1), pos=(20,245))
+                self.clas = wx.ComboBox(self, value="Klasse Auswählen", choices=self.DropDownList, size=(150,-1), pos=(20,245), style=wx.CB_SORT)
                 self.buttonsave = wx.Button(self, -1, label='Hinzufügen', pos=(650,290), size=(100,25))
                 self.buttondelete = wx.Button(self, -1, label='Löschen', pos=(760,290), size=(100,25))
                 self.buttonadd_class = wx.Button(self, -1, label='Klasse hinzufügen', pos=(650,320), size=(210,25))
@@ -74,14 +74,36 @@ class DriverList(wx.Dialog):
                 """
                 Delet selected data from database
                 """
-                pass
+                item = self.dl.GetFirstSelected() 
+                nr = self.dl.GetItem(itemId=item, col=0)
+                print(nr.GetText())
+                # Delete data from database
+                Database().RemoveDataById(nr.GetText())
+
+                #Update the list
+                self.__update_list()
+                return
+        
 
         def __add_class(self, event):
                 """
                 Add ne class to database
                 """
-                pass
+                classdlg = wx.TextEntryDialog(None, 'Geben Sie eine neue Klasse an')
+                ret = classdlg.ShowModal()
+                if ret == wx.ID_OK:
+                    Database().AddClass(classdlg.GetValue())
 
+                classdlg.Destroy()
+
+                # Clear and update combobox
+                self.clas.Clear()                
+                for item in Database().GetAllData('Klassen', convert=True):
+                        self.clas.Append(item)
+
+                # Readd Value
+                self.clas.SetValue('Klasse Auswählen')
+                return
 
         def __update_list(self):
                 """

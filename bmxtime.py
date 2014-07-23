@@ -15,6 +15,9 @@ from driverlist import DriverList
 from logger import Log
 
 log = Log()
+
+wx.SetDefaultPyEncoding("iso-8859-1")
+
 class StartWindow(wx.Frame):
      
         def __init__(self, parent = None, id = -1, title = "BMX Bludenz - Zeitmessung"):
@@ -305,13 +308,13 @@ class StartWindow(wx.Frame):
                 Shows the Aboutdialog
                 """
                 
-                description = """\nEine simples Zeitmessungprogramm mit Hilfe von Ardurino UNO\nEs werden auch Zwischenzeiten unterstï¿½tzt"""
+                description = """\nEine simples Zeitmessungprogramm mit Hilfe von Ardurino UNO\n\tEs werden auch Zwischenzeiten unterstützt"""
 
                 info = wx.AboutDialogInfo()
                 info.SetIcon(wx.Icon('icons/bmx.png', wx.BITMAP_TYPE_PNG))
-                info.SetName('\nZeitmessung')
+                info.SetName('Zeitmessung')
                 info.SetDescription(description)
-                info.SetVersion('\n1.0 Beta')
+                info.SetVersion('1.0 Beta')
                 info.SetWebSite('http://bmx-bludenz.at' )
 
                 wx.AboutBox(info)
