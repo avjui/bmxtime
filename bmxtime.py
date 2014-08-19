@@ -26,10 +26,16 @@ class StartWindow(wx.Frame):
                         self, parent, id, title, size = (1000,500), 
                         style = wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
                 self.panel = wx.Panel(self, -1)
+                self.led = {}
                 self.main()
 
                 
         def main(self):
+
+                # define Layout
+                mainbox = wx.BoxSizer(wx.HORIZONTAL)
+                timbox = wx.BoxSizer(wx.VERTICAL)
+                inputbox =wx.BoxSizer(wx.VERTICAL)
 
                 # StatusBar
                 self.CreateStatusBar()
@@ -94,7 +100,7 @@ class StartWindow(wx.Frame):
                 self.horizontal = wx.BoxSizer()
                 
                 for key,value in labels.items():
-                        self.CreatPanel(key, value)
+                        time = self.CreatPanel(key, value)
 
                 # Tabel
                 self.CreatList()
@@ -127,21 +133,23 @@ class StartWindow(wx.Frame):
                 self.boxx = position[0] - 10
                 self.boxy = position[1] + 40
 
-                current = time.localtime(time.time())
+                # only for testing
+                #current = time.localtime(time.time())
                 # time string can have characters 0..9, -, period, or space
-                ts = time.strftime("%H %M %S", current)
+                #ts = time.strftime("%H %M %S", current)
 
                 pos = wx.DefaultPosition
                 self.cpnl = wx.Panel(self.panel, pos=(self.boxx, self.boxy),size=(180, 40), style = wx.BORDER_SUNKEN)
-                self.led = gizmos.LEDNumberCtrl(self.cpnl, -1, wx.DefaultPosition, size=(176,36))
-                self.led.SetBackgroundColour('blue')
-                self.led.SetForegroundColour('yellow')
-                #self.led.SetValue(ts)
+                self.led[label] = gizmos.LEDNumberCtrl(self.cpnl, -1, wx.DefaultPosition, size=(176,36))
+                self.led[label].SetBackgroundColour('blue')
+                self.led[label].SetForegroundColour('yellow')
+                #self.led[label].SetValue(ts)
         
                 self.tonetext = wx.StaticText(self.panel, -1, label, position, (160, -1), wx.ALIGN_CENTER)
                 self.tonetext.SetFont(self.font)
                 self.horizontal.Add(self.tonetext, flag=wx.CENTER)
-                self.horizontal.Add(self.cpnl, flag=wx.CENTER)                
+                self.horizontal.Add(self.cpnl, flag=wx.CENTER)
+
                 
 
         def CreatList(self):
